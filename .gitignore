@@ -27,3 +27,13 @@ cmake-build-debug-event-trace/
 
 /examples/html/*
 /examples/latex/*
+
+# ProgramBench course-competition artifacts
+executable
+.programbench/venv/
+.programbench/gitconfig
+.programbench/home/
+.programbench/tests/
+.programbench/run/
+.programbench/shims/
+.programbench/tmux/
