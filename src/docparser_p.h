@@ -58,19 +58,24 @@ using DocStyleChangeStack = IterableStack<const DocNodeVariant *>;
  */
 struct DocParserContext
 {
+  // scope and current parse state
   const Definition *scope = nullptr;
-  QCString context;
-  bool inSeeBlock = false;
-  bool inCodeStyle = false;
-  bool xmlComment = false;
-  bool insideHtmlLink = false;
+    QCString context;
+    bool inSeeBlock = false;
+    bool inCodeStyle = false;
+    bool xmlComment = false;
+    bool insideHtmlLink = false;
+    QCString fileName;
+    QCString relPath;
+    SrcLangExt   lang = SrcLangExt::Cpp;
+
+  // parser stacks
   DocNodeStack nodeStack;
   DocStyleChangeStack styleStack;
   DocStyleChangeStack initialStyleStack;
-  DefinitionStack copyStack;
-  QCString fileName;
-  QCString relPath;
+  DefinitionStack copyPath;
 
+  // command bookkeeping
   bool         hasParamCommand = false;
   bool         hasReturnCommand = false;
   StringMultiSet retvalsFound;
@@ -80,8 +85,8 @@ struct DocParserContext
   QCString     exampleName;
   QCString     searchUrl;
   QCString     prefix;
-  SrcLangExt   lang = SrcLangExt::Cpp;
 
+  // include-file tracking
   QCString     includeFileName;
   QCString     includeFileText;
   size_t       includeFileOffset = 0;
@@ -90,6 +95,7 @@ struct DocParserContext
   bool         includeFileShowLineNo = false;
   bool         stripCodeComments = true;
 
+  // tokenizer state
   TokenInfo *token = nullptr;
   int      lineNo = 0;
   bool     markdownSupport = false;
@@ -106,6 +112,9 @@ class DocParser : public IDocParser
                                       const QCString &doc);
     QCString processCopyDoc(const char *data,size_t &len);
     QCString findAndCopyImage(const QCString &fileName,DocImage::Type type, bool doWarn = true);
+    bool isAlreadyParsed(const Definition *def) const;
+    void warnCopyNotFound(const QCString &id, bool isBrief) const;void appendCopyDocPrologue(QCString &result, const QCString &file, int line) const;
+    void appendInlineArgumentList(QCString &result, const Definition *def);
     void checkArgumentName();
     void checkRetvalName();
     void checkUnOrMultipleDocumentedParams();

@@ -4168,10 +4168,10 @@ void DocPara::handleInheritDoc()
       parser()->context.memberDef=reMd;
       while (!parser()->context.styleStack.empty()) parser()->context.styleStack.pop();
       while (!parser()->context.nodeStack.empty()) parser()->context.nodeStack.pop();
-      parser()->context.copyStack.push_back(reMd);
+      parser()->context.copyPath.push_back(reMd);
       parser()->internalValidatingParseDoc(thisVariant(),children(),reMd->briefDescription());
       parser()->internalValidatingParseDoc(thisVariant(),children(),reMd->documentation());
-      parser()->context.copyStack.pop_back();
+      parser()->context.copyPath.pop_back();
       auto hasParamCommand   = parser()->context.hasParamCommand;
       auto hasReturnCommand  = parser()->context.hasReturnCommand;
       auto retvalsFound      = parser()->context.retvalsFound;
